@@ -3,18 +3,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Bir Şey Saklı</title>
+  <title>⋯</title>
   <style>
     :root{
       --bg1:#fff5f7;
       --bg2:#f3f7ff;
-      --card:#ffffffcc;
+      --card:#ffffffb8;
+      --glass:#ffffff80;
       --text:#1f2937;
       --muted:#6b7280;
       --accent:#ff4d6d;
       --accent2:#7c3aed;
-      --shadow: 0 18px 60px rgba(0,0,0,.12);
+      --accent3:#22c55e;
+      --shadow: 0 24px 80px rgba(0,0,0,.12);
     }
+
     *{ box-sizing:border-box; }
     body{
       margin:0;
@@ -27,149 +30,226 @@
       background:
         radial-gradient(1200px 700px at 15% 10%, #ffd6e0 0%, transparent 60%),
         radial-gradient(900px 600px at 85% 20%, #d9d6ff 0%, transparent 60%),
+        radial-gradient(900px 700px at 45% 85%, #d8fff2 0%, transparent 55%),
         linear-gradient(135deg, var(--bg1), var(--bg2));
     }
-    .glow{
+
+    .aura{
       position:fixed; inset:-40%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,77,109,.18), transparent 55%),
-                  radial-gradient(circle at 70% 60%, rgba(124,58,237,.16), transparent 55%);
-      filter: blur(30px);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,77,109,.18), transparent 55%),
+        radial-gradient(circle at 70% 60%, rgba(124,58,237,.16), transparent 55%),
+        radial-gradient(circle at 50% 80%, rgba(34,197,94,.10), transparent 55%);
+      filter: blur(28px);
       animation: floaty 10s ease-in-out infinite alternate;
       pointer-events:none;
     }
     @keyframes floaty{
       from{ transform: translate3d(-1%, -1%, 0) scale(1.02); }
-      to  { transform: translate3d( 1%,  1%, 0) scale(1.06); }
+      to  { transform: translate3d( 1%,  1%, 0) scale(1.07); }
     }
 
-    .wrap{ width:min(460px, 92vw); position:relative; z-index:1; }
+    .dust{
+      position:fixed; inset:0;
+      background-image:
+        radial-gradient(rgba(255,255,255,.35) 1px, transparent 1px),
+        radial-gradient(rgba(255,255,255,.22) 1px, transparent 1px);
+      background-size: 46px 46px, 78px 78px;
+      background-position: 0 0, 14px 18px;
+      opacity:.25;
+      pointer-events:none;
+      animation: drift 16s linear infinite;
+    }
+    @keyframes drift{
+      from{ transform: translate3d(0,0,0); }
+      to{ transform: translate3d(-42px, 26px, 0); }
+    }
+
+    .wrap{ width:min(520px, 92vw); position:relative; z-index:1; }
 
     .card{
-      background: var(--card);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,.6);
-      border-radius: 22px;
-      padding: 0; /* içeride wrapper var */
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.85));
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 28px;
       box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
       overflow:hidden;
-      transform: translateY(14px);
+      transform: translateY(16px);
       opacity:0;
-      animation: enter .7s cubic-bezier(.2,.9,.2,1) forwards;
+      animation: enter .75s cubic-bezier(.2,.9,.2,1) forwards;
     }
     @keyframes enter{ to { transform: translateY(0); opacity:1; } }
 
-    /* ÖNEMLİ: shake artık card'da değil iç wrapper'da (transform çakışması yok) */
     .inner{
-      padding: 26px 22px;
+      padding: 26px 22px 22px;
       text-align:center;
-    }
-    .inner.shake{ animation: shake .28s ease; }
-    @keyframes shake{
-      0%{ transform: translateX(0); }
-      25%{ transform: translateX(-4px); }
-      50%{ transform: translateX(4px); }
-      75%{ transform: translateX(-3px); }
-      100%{ transform: translateX(0); }
-    }
-
-    .badge{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding:8px 12px;
-      border-radius:999px;
-      background: rgba(255,255,255,.7);
-      border: 1px solid rgba(255,255,255,.75);
-      font-weight:700;
-      font-size:12.5px;
-      color: rgba(31,41,55,.9);
-    }
-    .dot{
-      width:8px; height:8px; border-radius:50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 0 0 6px rgba(255,77,109,.12);
-      animation: pulse 1.6s ease-in-out infinite;
-    }
-    @keyframes pulse{
-      0%,100%{ transform: scale(1); opacity:.85; }
-      50%{ transform: scale(1.15); opacity:1; }
-    }
-
-    h2{ margin: 14px 0 6px; font-size: 22px; letter-spacing: .2px; }
-    p{ margin: 0 0 18px; color: var(--muted); line-height:1.55; }
-
-    .btn{
-      width: 100%;
-      border:0;
-      padding: 14px 16px;
-      border-radius: 16px;
-      font-size: 16px;
-      font-weight: 800;
-      cursor:pointer;
-      color:white;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 12px 30px rgba(255,77,109,.25);
-      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
       position:relative;
-      overflow:hidden;
+    }
+
+    .top{
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:10px;
+      margin-bottom: 10px;
+      user-select:none;
+    }
+    .status{
+      font-size:12px;
+      color: rgba(31,41,55,.55);
+    }
+
+    .sealZone{
+      margin: 8px auto 8px;
+      width: 260px;
+      height: 260px;
+      position:relative;
+      display:grid;
+      place-items:center;
+    }
+
+    .ring{
+      position:absolute;
+      inset:0;
+      border-radius:50%;
+      border: 1px solid rgba(255,255,255,.75);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,77,109,.14), transparent 55%),
+        radial-gradient(circle at 70% 60%, rgba(124,58,237,.12), transparent 55%);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.65) inset,
+        0 26px 90px rgba(124,58,237,.10);
+      opacity:.9;
+      animation: spin 16s linear infinite;
+      mask-image: radial-gradient(circle, black 62%, transparent 71%);
+    }
+    .ring.two{
+      inset: 18px;
+      opacity:.75;
+      animation-duration: 26s;
+      animation-direction: reverse;
+      box-shadow: 0 26px 90px rgba(255,77,109,.08);
+    }
+    .ring.three{
+      inset: 38px;
+      opacity:.6;
+      animation-duration: 34s;
+      mask-image: radial-gradient(circle, black 60%, transparent 72%);
+    }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+
+    .orbBtn{
+      width: 140px;
+      height: 140px;
+      border-radius: 34px;
+      border: 1px solid rgba(255,255,255,.78);
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,.95), rgba(255,255,255,.35) 35%, rgba(255,255,255,.08) 65%),
+        linear-gradient(135deg, rgba(255,77,109,.18), rgba(124,58,237,.16));
+      box-shadow:
+        0 24px 75px rgba(0,0,0,.10),
+        0 0 0 10px rgba(255,77,109,.06);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
+      position:relative;
+      overflow:hidden;
+      transition: transform .14s ease, filter .14s ease;
     }
-    .btn:hover{ transform: translateY(-1px); filter: brightness(1.02); }
-    .btn:active{ transform: translateY(1px) scale(.99); box-shadow: 0 8px 18px rgba(255,77,109,.18); }
-    .btn::after{
+    .orbBtn:hover{ transform: translateY(-1px); filter: brightness(1.02); }
+    .orbBtn:active{ transform: translateY(1px) scale(.99); }
+
+    .orbBtn::after{
       content:"";
       position:absolute;
-      inset:-40% -60%;
-      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%);
-      transform: translateX(-40%) rotate(12deg);
-      animation: shine 2.8s ease-in-out infinite;
+      inset:-50% -70%;
+      background: linear-gradient(120deg, transparent 35%, rgba(255,255,255,.55) 50%, transparent 65%);
+      transform: translateX(-40%) rotate(14deg);
+      animation: shine 3.4s ease-in-out infinite;
       pointer-events:none;
+      opacity:.9;
     }
     @keyframes shine{
-      0%{ transform: translateX(-55%) rotate(12deg); opacity:.0; }
-      20%{ opacity:.7; }
-      60%{ opacity:.0; }
-      100%{ transform: translateX(55%) rotate(12deg); opacity:0; }
+      0%{ transform: translateX(-55%) rotate(14deg); opacity:0; }
+      18%{ opacity:.85; }
+      55%{ opacity:0; }
+      100%{ transform: translateX(55%) rotate(14deg); opacity:0; }
     }
 
-    /* panel açılma: daha stabil (display yok, sadece max-height/opacity) */
+    .glyph{
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing:.06em;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color: transparent;
+      transform: translateY(0);
+      transition: transform .25s ease;
+    }
+    .orbBtn.opening .glyph{ transform: scale(1.12) rotate(-6deg); }
+
+    .whisper{
+      margin: 6px auto 0;
+      font-size: 13px;
+      color: rgba(31,41,55,.62);
+      min-height: 18px;
+      letter-spacing:.02em;
+      user-select:none;
+    }
+
     .panel{
-      margin-top: 14px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.55);
-      border: 1px solid rgba(255,255,255,.7);
+      margin-top: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.60);
+      border: 1px solid rgba(255,255,255,.75);
       overflow:hidden;
       max-height: 0;
       opacity: 0;
-      transform: translateY(6px);
-      transition: max-height .45s ease, opacity .22s ease, transform .22s ease;
+      transform: translateY(10px);
+      transition: max-height .55s ease, opacity .25s ease, transform .25s ease;
     }
     .panel.show{
-      max-height: 240px;
+      max-height: 340px;
       opacity: 1;
       transform: translateY(0);
     }
 
     .msg{
-      padding: 14px 14px 10px;
-      font-size: 18px;
-      font-weight: 750;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      padding: 16px 16px 10px;
+      font-size: 18.5px;
+      font-weight: 800;
+      line-height: 1.32;
       text-align:center;
-      min-height: 64px;
+      min-height: 72px;
+      display:grid;
+      place-items:center;
     }
     .sub{
-      padding: 0 14px 14px;
+      padding: 0 16px 16px;
       font-size: 12.5px;
-      color: var(--muted);
-      opacity:.95;
+      color: rgba(31,41,55,.60);
+      text-align:center;
     }
 
-    /* uçuşan kalpler */
-    .heart{
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(31,41,55,.14), transparent);
+      margin: 10px 0 0;
+    }
+
+    .pop{
+      animation: pop .35s ease;
+    }
+    @keyframes pop{
+      0%{ transform: translateY(10px) scale(.985); opacity:0; }
+      70%{ transform: translateY(0) scale(1.01); opacity:1; }
+      100%{ transform: translateY(0) scale(1); opacity:1; }
+    }
+
+    .particle{
       position: fixed;
       left: var(--x);
       top: var(--y);
@@ -179,104 +259,154 @@
       animation: fly var(--d) ease-out forwards;
       pointer-events:none;
       z-index:2;
-      filter: drop-shadow(0 10px 10px rgba(0,0,0,.12));
+      filter: drop-shadow(0 10px 10px rgba(0,0,0,.10));
     }
     @keyframes fly{
-      0%   { opacity:0; transform: translate(-50%, -40%) rotate(var(--r)) scale(.8); }
-      10%  { opacity:1; }
-      100% { opacity:0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(calc(var(--r) + 20deg)) scale(1.05); }
+      0%   { opacity:0; transform: translate(-50%, -30%) rotate(var(--r)) scale(.85); }
+      12%  { opacity:1; }
+      100% { opacity:0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(calc(var(--r) + 18deg)) scale(1.05); }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .aura,.dust,.ring,.orbBtn::after{ animation:none !important; }
+      *{ transition:none !important; }
     }
   </style>
 </head>
 <body>
-  <div class="glow"></div>
+  <div class="aura"></div>
+  <div class="dust"></div>
 
   <div class="wrap">
-    <div class="card">
-      <div class="inner" id="inner">
-        <div class="badge"><span class="dot"></span> sadece bir tık uzağında</div>
+    <div class="card" id="card">
+      <div class="inner">
+        <div class="top">
+          <div class="status" id="status">⋯</div>
+        </div>
 
-        <h2>Bir şey saklı…</h2>
-        <p>İçinde küçük bir sır var. Merak ediyorsan kilidi aç.</p>
+        <div class="sealZone">
+          <div class="ring"></div>
+          <div class="ring two"></div>
+          <div class="ring three"></div>
 
-        <button class="btn" id="btn">🔒 Kilidi Aç</button>
+          <div class="orbBtn" id="orb" role="button" tabindex="0" aria-label="Mührü aç">
+            <div class="glyph" id="glyph">✦</div>
+          </div>
+        </div>
+
+        <div class="whisper" id="whisper">dokun…</div>
 
         <div class="panel" id="panel">
           <div class="msg" id="msg" aria-live="polite"></div>
+          <div class="divider"></div>
           <div class="sub" id="sub"></div>
         </div>
+
       </div>
     </div>
   </div>
 
   <script>
-    const hints = [
-      "İpucu: Bu sır, seni her gördüğümde aklıma geliyor.",
-      "İpucu: Bazen tek kelime bile kalbimi yumuşatıyor.",
-      "İpucu: Bu sırrın adı: sen.",
-      "İpucu: Bugün ekstra güzel bir detay var…"
+    const whispers = [
+      "bir şey… sana ait.",
+      "yaklaş… çok az kaldı.",
+      "içeride küçük bir sır var.",
+      "bir kez daha dokun…"
     ];
 
+    // ✅ Senin cümlelerin dahil
     const secrets = [
-      "Seninle her şey daha güzel.",
       "Gülüşün günümü toparlıyor.",
-      "Bir kahve + uzun sarılma borcum var.",
-      "Yanımda olmasan da aklımın hep bir köşesindesin..",
-      "Ojelerin de benden dolayı bozuldu.. Özür dilerim..",
+      "Bir kahve + uzun sarılma borcum var.. unutmuş değilim..",
+      "O noodle ve mantıyı da yiyeceğiz.. not aldım..",
+      "Ayrıca uyumadan önceki halin de çok güzel.",
+      "Yüzüğü taksan aslında güzel olur biliyor musun... yakışıyor diye diyorum.. ",
+      "bu arada yüzünde gözlük izi falan yoktu tamamen tenini hissetmek için o an uydurduğum bir yalandı..",
+      "Yanımda olmasan da aklımın en güzel yerindesin.",
+      "Moblande de acilen başlaman lazım. Peakyi seviyorsun ya buna da bayılacaksın adım gibi eminim.."
     ];
 
-    const btn = document.getElementById("btn");
+    const orb = document.getElementById("orb");
+    const glyph = document.getElementById("glyph");
+    const status = document.getElementById("status");
+    const whisper = document.getElementById("whisper");
     const panel = document.getElementById("panel");
     const msgEl = document.getElementById("msg");
     const subEl = document.getElementById("sub");
-    const inner = document.getElementById("inner");
 
     let stage = 0;
 
     function rand(min, max){ return Math.random() * (max - min) + min; }
+    function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
 
-    function heartsBurst(count = 12){
-      const cx = window.innerWidth * 0.5;
-      const cy = window.innerHeight * 0.48;
+    function particles(count = 16){
+      const r = orb.getBoundingClientRect();
+      const cx = r.left + r.width/2;
+      const cy = r.top + r.height/2;
+
       for(let i=0;i<count;i++){
-        const h = document.createElement("div");
-        h.className = "heart";
-        h.textContent = Math.random() > 0.25 ? "❤️" : "💖";
-        h.style.setProperty("--x", cx + rand(-40,40) + "px");
-        h.style.setProperty("--y", cy + rand(-20,20) + "px");
-        h.style.setProperty("--dx", rand(-180, 180) + "px");
-        h.style.setProperty("--dy", rand(-240, -80) + "px");
-        h.style.setProperty("--r", rand(-20, 20) + "deg");
-        h.style.setProperty("--s", rand(18, 28) + "px");
-        h.style.setProperty("--d", rand(900, 1400) + "ms");
-        document.body.appendChild(h);
-        h.addEventListener("animationend", () => h.remove());
+        const p = document.createElement("div");
+        p.className = "particle";
+        p.textContent = Math.random() > 0.55 ? "✨" : (Math.random() > 0.35 ? "❤️" : "💖");
+        p.style.setProperty("--x", cx + "px");
+        p.style.setProperty("--y", cy + "px");
+        p.style.setProperty("--dx", rand(-220, 220) + "px");
+        p.style.setProperty("--dy", rand(-260, -70) + "px");
+        p.style.setProperty("--r", rand(-18, 18) + "deg");
+        p.style.setProperty("--s", rand(16, 28) + "px");
+        p.style.setProperty("--d", rand(850, 1400) + "ms");
+        document.body.appendChild(p);
+        p.addEventListener("animationend", () => p.remove());
       }
     }
 
-    function shake(){
-      inner.classList.remove("shake");
-      void inner.offsetWidth;
-      inner.classList.add("shake");
+    function opening(){
+      orb.classList.remove("opening");
+      void orb.offsetWidth;
+      orb.classList.add("opening");
+      setTimeout(() => orb.classList.remove("opening"), 260);
     }
 
-    btn.addEventListener("click", () => {
+    function showPanel(main, sub){
       panel.classList.add("show");
+      msgEl.classList.remove("pop");
+      void msgEl.offsetWidth;
+      msgEl.classList.add("pop");
+      msgEl.textContent = main;
+      subEl.textContent = sub || "";
+    }
+
+    function next(){
+      opening();
+      particles(18);
 
       if(stage === 0){
-        msgEl.textContent = hints[Math.floor(Math.random() * hints.length)];
-        subEl.textContent = "Bir kez daha tıkla…";
-        btn.textContent = "🔓 Biraz Daha Aç";
+        status.textContent = "kilit gevşedi";
+        whisper.textContent = "bir kez daha…";
+        glyph.textContent = "✧";
+        showPanel(pick(whispers), "bir kez daha dokun…");
         stage = 1;
-        shake();
         return;
       }
 
-      msgEl.textContent = secrets[Math.floor(Math.random() * secrets.length)];
-      subEl.textContent = "Yeniden tıklarsan başka bir sır daha…";
-      btn.textContent = "💌 Başka Bir Sır";
+      if(stage === 1){
+        status.textContent = "açıldı";
+        whisper.textContent = "istersen tekrar…";
+        glyph.textContent = "✦";
+        showPanel(pick(secrets), "dokununca değişir");
+        stage = 2;
+        return;
+      }
+
+      status.textContent = "başka bir sır";
+      whisper.textContent = "dokun…";
+      showPanel(pick(secrets), "yeniden dokunursan yenisi gelir");
       stage++;
-      heartsBurst(12);
+    }
+
+    orb.addEventListener("click", next);
+    orb.addEventListener("keydown", (e) => {
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); next(); }
     });
   </script>
 </body>
