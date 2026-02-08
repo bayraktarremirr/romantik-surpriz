@@ -3,32 +3,281 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sana Bir Sürpriz</title>
+  <title>Bir Şey Saklı</title>
   <style>
-    body { font-family: system-ui; display:flex; min-height:100vh; margin:0; align-items:center; justify-content:center; background:#fff5f7; }
-    .card { background:white; padding:24px; border-radius:16px; width:min(420px, 92vw); box-shadow:0 8px 30px rgba(0,0,0,.08); text-align:center; }
-    button { padding:12px 16px; border:0; border-radius:12px; font-size:16px; cursor:pointer; }
-    .msg { margin-top:16px; font-size:18px; }
+    :root{
+      --bg1:#fff5f7;
+      --bg2:#f3f7ff;
+      --card:#ffffffcc;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --accent:#ff4d6d;
+      --accent2:#7c3aed;
+      --shadow: 0 18px 60px rgba(0,0,0,.12);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      overflow:hidden;
+      background:
+        radial-gradient(1200px 700px at 15% 10%, #ffd6e0 0%, transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, #d9d6ff 0%, transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+    }
+    .glow{
+      position:fixed; inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,77,109,.18), transparent 55%),
+                  radial-gradient(circle at 70% 60%, rgba(124,58,237,.16), transparent 55%);
+      filter: blur(30px);
+      animation: floaty 10s ease-in-out infinite alternate;
+      pointer-events:none;
+    }
+    @keyframes floaty{
+      from{ transform: translate3d(-1%, -1%, 0) scale(1.02); }
+      to  { transform: translate3d( 1%,  1%, 0) scale(1.06); }
+    }
+
+    .wrap{ width:min(460px, 92vw); position:relative; z-index:1; }
+
+    .card{
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.6);
+      border-radius: 22px;
+      padding: 0; /* içeride wrapper var */
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      transform: translateY(14px);
+      opacity:0;
+      animation: enter .7s cubic-bezier(.2,.9,.2,1) forwards;
+    }
+    @keyframes enter{ to { transform: translateY(0); opacity:1; } }
+
+    /* ÖNEMLİ: shake artık card'da değil iç wrapper'da (transform çakışması yok) */
+    .inner{
+      padding: 26px 22px;
+      text-align:center;
+    }
+    .inner.shake{ animation: shake .28s ease; }
+    @keyframes shake{
+      0%{ transform: translateX(0); }
+      25%{ transform: translateX(-4px); }
+      50%{ transform: translateX(4px); }
+      75%{ transform: translateX(-3px); }
+      100%{ transform: translateX(0); }
+    }
+
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(255,255,255,.75);
+      font-weight:700;
+      font-size:12.5px;
+      color: rgba(31,41,55,.9);
+    }
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 6px rgba(255,77,109,.12);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%,100%{ transform: scale(1); opacity:.85; }
+      50%{ transform: scale(1.15); opacity:1; }
+    }
+
+    h2{ margin: 14px 0 6px; font-size: 22px; letter-spacing: .2px; }
+    p{ margin: 0 0 18px; color: var(--muted); line-height:1.55; }
+
+    .btn{
+      width: 100%;
+      border:0;
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor:pointer;
+      color:white;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 12px 30px rgba(255,77,109,.25);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      position:relative;
+      overflow:hidden;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.02); }
+    .btn:active{ transform: translateY(1px) scale(.99); box-shadow: 0 8px 18px rgba(255,77,109,.18); }
+    .btn::after{
+      content:"";
+      position:absolute;
+      inset:-40% -60%;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%);
+      transform: translateX(-40%) rotate(12deg);
+      animation: shine 2.8s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes shine{
+      0%{ transform: translateX(-55%) rotate(12deg); opacity:.0; }
+      20%{ opacity:.7; }
+      60%{ opacity:.0; }
+      100%{ transform: translateX(55%) rotate(12deg); opacity:0; }
+    }
+
+    /* panel açılma: daha stabil (display yok, sadece max-height/opacity) */
+    .panel{
+      margin-top: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.7);
+      overflow:hidden;
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: max-height .45s ease, opacity .22s ease, transform .22s ease;
+    }
+    .panel.show{
+      max-height: 240px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .msg{
+      padding: 14px 14px 10px;
+      font-size: 18px;
+      font-weight: 750;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      min-height: 64px;
+    }
+    .sub{
+      padding: 0 14px 14px;
+      font-size: 12.5px;
+      color: var(--muted);
+      opacity:.95;
+    }
+
+    /* uçuşan kalpler */
+    .heart{
+      position: fixed;
+      left: var(--x);
+      top: var(--y);
+      font-size: var(--s);
+      transform: translate(-50%, -50%) rotate(var(--r));
+      opacity:0;
+      animation: fly var(--d) ease-out forwards;
+      pointer-events:none;
+      z-index:2;
+      filter: drop-shadow(0 10px 10px rgba(0,0,0,.12));
+    }
+    @keyframes fly{
+      0%   { opacity:0; transform: translate(-50%, -40%) rotate(var(--r)) scale(.8); }
+      10%  { opacity:1; }
+      100% { opacity:0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(calc(var(--r) + 20deg)) scale(1.05); }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>Merhaba ❤️</h2>
-    <p>Bugün sana küçük bir sürprizim var.</p>
-    <button id="btn">Sürprizi Aç</button>
-    <div class="msg" id="msg"></div>
+  <div class="glow"></div>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="inner" id="inner">
+        <div class="badge"><span class="dot"></span> sadece bir tık uzağında</div>
+
+        <h2>Bir şey saklı…</h2>
+        <p>İçinde küçük bir sır var. Merak ediyorsan kilidi aç.</p>
+
+        <button class="btn" id="btn">🔒 Kilidi Aç</button>
+
+        <div class="panel" id="panel">
+          <div class="msg" id="msg" aria-live="polite"></div>
+          <div class="sub" id="sub"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
-    const messages = [
+    const hints = [
+      "İpucu: Bu sır, seni her gördüğümde aklıma geliyor.",
+      "İpucu: Bazen tek kelime bile kalbimi yumuşatıyor.",
+      "İpucu: Bu sırrın adı: sen.",
+      "İpucu: Bugün ekstra güzel bir detay var…"
+    ];
+
+    const secrets = [
       "Seninle her şey daha güzel.",
       "Gülüşün günümü toparlıyor.",
-      "Bir kahve + uzun sarılma borcum var."
+      "Bir kahve + uzun sarılma borcum var.",
+      "Yanımda olmasan da aklımın hep bir köşesindesin..",
+      "Ojelerin de benden dolayı bozuldu.. Özür dilerim..",
     ];
-    document.getElementById("btn").onclick = () => {
-      const i = Math.floor(Math.random() * messages.length);
-      document.getElementById("msg").textContent = messages[i];
-    };
+
+    const btn = document.getElementById("btn");
+    const panel = document.getElementById("panel");
+    const msgEl = document.getElementById("msg");
+    const subEl = document.getElementById("sub");
+    const inner = document.getElementById("inner");
+
+    let stage = 0;
+
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    function heartsBurst(count = 12){
+      const cx = window.innerWidth * 0.5;
+      const cy = window.innerHeight * 0.48;
+      for(let i=0;i<count;i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = Math.random() > 0.25 ? "❤️" : "💖";
+        h.style.setProperty("--x", cx + rand(-40,40) + "px");
+        h.style.setProperty("--y", cy + rand(-20,20) + "px");
+        h.style.setProperty("--dx", rand(-180, 180) + "px");
+        h.style.setProperty("--dy", rand(-240, -80) + "px");
+        h.style.setProperty("--r", rand(-20, 20) + "deg");
+        h.style.setProperty("--s", rand(18, 28) + "px");
+        h.style.setProperty("--d", rand(900, 1400) + "ms");
+        document.body.appendChild(h);
+        h.addEventListener("animationend", () => h.remove());
+      }
+    }
+
+    function shake(){
+      inner.classList.remove("shake");
+      void inner.offsetWidth;
+      inner.classList.add("shake");
+    }
+
+    btn.addEventListener("click", () => {
+      panel.classList.add("show");
+
+      if(stage === 0){
+        msgEl.textContent = hints[Math.floor(Math.random() * hints.length)];
+        subEl.textContent = "Bir kez daha tıkla…";
+        btn.textContent = "🔓 Biraz Daha Aç";
+        stage = 1;
+        shake();
+        return;
+      }
+
+      msgEl.textContent = secrets[Math.floor(Math.random() * secrets.length)];
+      subEl.textContent = "Yeniden tıklarsan başka bir sır daha…";
+      btn.textContent = "💌 Başka Bir Sır";
+      stage++;
+      heartsBurst(12);
+    });
   </script>
 </body>
 </html>
